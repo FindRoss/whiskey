@@ -1,5 +1,6 @@
 import express from 'express'; 
 import dotenv from 'dotenv'; 
+import pool from './db.js';
 
 dotenv.config(); 
 
@@ -10,6 +11,11 @@ app.get('/', (req, res) => {
     res.send('Whiskey Tracker API is running'); 
 }); 
 
+app.get('/db-test', async (req, res) => {
+    const result = await pool.query('SELECT NOW()');
+    res.json(result.rows[0]);
+});
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`)
-})
+});
