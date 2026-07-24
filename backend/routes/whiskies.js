@@ -98,6 +98,29 @@ router.get('/:id', async (req, res) => {
     res.status(201).json(result.rows[0]);
  });
 
+ router.get('/:id/rating', async (req, res) => {
+    const { id } = req.params; 
+
+    const result = await pool.query(
+        `SELECT
+            w.id,
+            w.name,
+            ROUND(AVG(t.rating), 1) AS average_rating,
+            COUNT(t.id) AS tasting_count
+        FROM whiskies w
+        LEFT JOIN tastings t On t.whiskey_id = w.id
+        WHERE w.id = $1
+        GROUP BY w.id`, 
+        [id]
+    );
+
+    if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Whiskey not found' }); 
+    }
+
+    res.json(result.rows[0]); 
+ });
+
 
 
  export default router;
