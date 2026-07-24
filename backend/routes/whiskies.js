@@ -71,6 +71,33 @@ router.get('/:id', async (req, res) => {
     res.status(204).send();
  });
 
+ router.get('/:id/tastings', async (req, res) => {
+    const { id } = req.params;
+    const result = await pool.query(
+        'SELECT * FROM tastings WHERE whiskey_id = $1 ORDER BY tasted_on DESC',
+        [id]
+    );
+    res.json(result.rows);
+ });
+
+ router.post('/:id/tastings', async (req, res) => {
+    const { id } = req.params; 
+    const { taster, tasted_on, comment, rating } = req.body; 
+
+    if (!taster) {
+        return res.status(400).json({ error: 'taster is required' });
+    }
+
+    const result = await pool.query(
+        `INSERT INTO tastings (whiskey_id, taster, tasted_on, comment, rating)
+        VALUES ($1, $2, COALESCE($3, CURRENT_DATE), $4, $5)
+        RETURNING *`,
+        [id, taster, tasted_on, comment, rating]
+    );
+
+    res.status(201).json(result.rows[0]);
+ });
+
 
 
  export default router;
