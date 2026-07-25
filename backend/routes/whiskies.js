@@ -1,5 +1,6 @@
 import express from 'express'; 
 import pool from '../db.js'; 
+import requireAuth from '../middleware/auth.js';
 
 const router = express.Router(); 
 
@@ -19,7 +20,7 @@ router.get('/:id', async (req, res) => {
   res.json(result.rows[0]);
  });
 
- router.post('/', async (req, res) => {
+ router.post('/', requireAuth, async (req, res) => {
   const {name, distillery, region, type, age_years, abv, notes} = req.body; 
 
   if (!name) {
@@ -36,7 +37,7 @@ router.get('/:id', async (req, res) => {
   res.status(201).json(result.rows[0]);
  });    
 
- router.put('/:id', async (req, res) => {
+ router.put('/:id', requireAuth, async (req, res) => {
   const { id } = req.params; 
   const { name, distillery, region, type, age_years, abv, notes } = req.body;
 
@@ -59,7 +60,7 @@ router.get('/:id', async (req, res) => {
   res.json(result.rows[0]);
  });
 
- router.delete('/:id', async (req, res) => {
+ router.delete('/:id',requireAuth, async (req, res) => {
     const { id } = req.params; 
 
     const result = await pool.query('DELETE FROM whiskies WHERE id = $1 RETURNING *', [id]); 
@@ -80,7 +81,7 @@ router.get('/:id', async (req, res) => {
     res.json(result.rows);
  });
 
- router.post('/:id/tastings', async (req, res) => {
+ router.post('/:id/tastings', requireAuth, async (req, res) => {
     const { id } = req.params; 
     const { taster, tasted_on, comment, rating } = req.body; 
 

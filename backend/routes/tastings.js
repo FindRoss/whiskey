@@ -1,5 +1,6 @@
 import express from 'express'; 
 import pool from '../db.js'; 
+import requireAuth from '../middleware/auth.js';
 
 const router = express.Router(); 
 
@@ -14,7 +15,7 @@ router.get('/:id', async (req, res) => {
   res.json(result.rows[0]);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
   const { id } = req.params; 
   const { taster, tasted_on, comment, rating } = req.body;  
 
@@ -37,7 +38,7 @@ router.put('/:id', async (req, res) => {
   res.json(result.rows[0]);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;  
   const result = await pool.query('DELETE FROM tastings WHERE id = $1 RETURNING *', [id]); 
 
