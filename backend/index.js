@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import pool from './db.js';
 import whiskiesRouter from './routes/whiskies.js'; 
 import tastingsRouter from './routes/tastings.js';
+import authRouter from './routes/auth.js'; 
+
 
 dotenv.config(); 
 
@@ -10,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use('/whiskies', whiskiesRouter); 
 app.use('/tastings', tastingsRouter);
+app.use('/auth', authRouter); 
 const port = process.env.PORT || 3001; 
 
 
