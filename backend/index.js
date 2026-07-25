@@ -14,14 +14,14 @@ const port = process.env.PORT || 3001;
 
 
 app.get('/', (req, res) => {
-    res.send('Whiskey Tracker API is running'); 
+  res.send('Whiskey Tracker API is running'); 
 }); 
 
 app.get('/db-test', async (req, res) => {
-    const result = await pool.query('SELECT NOW()');
-    res.json(result.rows[0]);
+  const result = await pool.query('SELECT NOW()');
+  res.json(result.rows[0]);
 });
 
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`)
+  console.log(`Server running on http://localhost:${port}`)
 });
