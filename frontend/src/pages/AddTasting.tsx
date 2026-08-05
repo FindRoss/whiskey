@@ -1,6 +1,7 @@
 import { useState } from 'react'; 
 import { useParams } from 'react-router-dom'; 
 import type { SubmitEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function AddTasting() {
   const { id } = useParams(); 
@@ -9,10 +10,32 @@ function AddTasting() {
   const [tastedOn, setTastedOn] = useState('');
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState('');
+  const navigate = useNavigate();
 
-  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault(); 
-    console.log({ whiskeyId: id, taster, tastedOn, comment, rating}); 
+
+    const token = localStorage.getItem('token');
+
+    try {
+      const res = await fetch(`http://localhost:3001/whiskies/${id}/tastings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
+        body: JSON.stringify({
+          taster, 
+          tasted_on: tastedOn ? tastedOn : null,
+          comment,
+          rating: rating ? Number(rating) : null,
+        }), 
+      });
+
+      if (!res.ok) throw new Error('This didnt work');
+      navigate(`/whiskies/${id}`);
+    
+
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

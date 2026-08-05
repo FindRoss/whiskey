@@ -1,6 +1,7 @@
 import express from 'express'; 
 import dotenv from 'dotenv'; 
 import pool from './db.js';
+import cors from 'cors';
 import whiskiesRouter from './routes/whiskies.js'; 
 import tastingsRouter from './routes/tastings.js';
 import authRouter from './routes/auth.js'; 
@@ -10,6 +11,7 @@ dotenv.config();
 
 const app = express(); 
 app.use(express.json());
+app.use(cors({ origin: 'http://localhost:5173' })); 
 app.use('/whiskies', whiskiesRouter); 
 app.use('/tastings', tastingsRouter);
 app.use('/auth', authRouter); 

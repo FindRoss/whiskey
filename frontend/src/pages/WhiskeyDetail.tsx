@@ -1,39 +1,51 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { Whiskey, Tasting } from '../types';
 
-const placeholderWhiskey: Whiskey = {
-  id: 1, 
-  name: 'Lagavulin', 
-  distillery: 'Lagavulin', 
-  region: 'Islay', 
-  type: 'Single Malt', 
-  age_years: 16, 
-  abv: '43.0', 
-  notes: 'Smokey, peaty, classic Islay.',
-  created_at: new Date().toISOString()
-}; 
-
-const placeholderTastings: Tasting[] = [
-  {
-    id: 1, 
-    whiskey_id: 1,
-    taster: 'Ross', 
-    tasted_on: '2026-07-23',
-    comment: 'Big smoke up front, long peaty finish.',
-    rating: 88, 
-    created_at: new Date().toISOString(), 
-  },
-];
-
 function WhiskeyDetail() {
   const { id } = useParams(); 
+  const [whiskey, setWhiskey] = useState<Whiskey | null>(null);
+  const [tastings, setTastings] = useState<Tasting[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [whiskeyRes, tastingsRes] = await Promise.all([
+          fetch(`http://localhost:3001/whiskies/${id}`),
+          fetch(`http://localhost:3001/whiskies/${id}/tastings`)
+        ]);
+
+        if (!whiskeyRes.ok) throw new Error('Whiskey not found');
+        if (!tastingsRes.ok) throw new Error('Failed to fetch tastings');
+
+        const whiskeyData = await whiskeyRes.json(); 
+        const tastingsData = await tastingsRes.json();
+
+        setWhiskey(whiskeyData);
+        setTastings(tastingsData);
+
+      } catch (err) {
+        if (err instanceof Error) setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!whiskey) return <p>Whiskey not found.</p>;
+
   return (
     <div>
-      <h1>{placeholderWhiskey.name}</h1>
+      <h1>{whiskey.name}</h1>
       <p>
-        {placeholderWhiskey.distillery} · {placeholderWhiskey.region} ·{' '}
-        {placeholderWhiskey.age_years} yr · {placeholderWhiskey.abv}% ABV
+        {whiskey.distillery} · {whiskey.region} ·{' '}
+        {whiskey.age_years} yr · {whiskey.abv}% ABV
       </p>
       <p>Viewing whiskey id: {id}</p>
 
@@ -41,7 +53,7 @@ function WhiskeyDetail() {
 
       <h2>Tastings</h2>
       <ul>
-        {placeholderTastings.map((tasting) => (
+        {tastings.map((tasting) => (
           <li key={tasting.id}>
             <strong>{tasting.taster}</strong>
             {' '}({tasting.tasted_on}) — rating {tasting.rating}
