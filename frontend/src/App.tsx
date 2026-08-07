@@ -4,6 +4,7 @@ import WhiskeyDetail from './pages/WhiskeyDetail';
 import AddWhiskey from './pages/AddWhiskey';
 import AddTasting from './pages/AddTasting';
 import Login from './pages/Login';
+import './App.css';
 
 function App() {
   return (
@@ -16,13 +17,16 @@ function App() {
         <Link to="/login">Login</Link>
       </nav>
 
-      <Routes>
-        <Route path="/" element={<WhiskeyList />} />
-        <Route path="/whiskies/:id" element={<WhiskeyDetail />} />
-        <Route path="/whiskies/new" element={<AddWhiskey />} />
-        <Route path="/whiskies/:id/tastings/new" element={<AddTasting />} />
-        <Route path="/login" element={<Login />} /> 
-      </Routes>
+      
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<WhiskeyList />} />
+          <Route path="/whiskies/:id" element={<WhiskeyDetail />} />
+          <Route path="/whiskies/new" element={<AddWhiskey />} />
+          <Route path="/whiskies/:id/tastings/new" element={<AddTasting />} />
+          <Route path="/login" element={<Login />} /> 
+        </Routes>
+      </div>
     </div>
   )
 }

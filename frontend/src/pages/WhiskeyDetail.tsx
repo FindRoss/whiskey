@@ -56,7 +56,7 @@ function WhiskeyDetail() {
         {tastings.map((tasting) => (
           <li key={tasting.id}>
             <strong>{tasting.taster}</strong>
-            {' '}({tasting.tasted_on}) — rating {tasting.rating}
+            {' '}({new Date(tasting.tasted_on).toLocaleDateString()}) — rating {tasting.rating}
             <br /> 
             {tasting.comment}
           </li>

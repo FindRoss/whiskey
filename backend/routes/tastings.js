@@ -1,6 +1,7 @@
 import express from 'express'; 
 import pool from '../db.js'; 
-import requireAuth from '../middleware/auth.js';
+import requireAuth from '../middleware/requireAuth.js';
+import requireAdmin from '../middleware/requireAdmin.js'
 
 const router = express.Router(); 
 
@@ -38,7 +39,7 @@ router.put('/:id', requireAuth, async (req, res) => {
   res.json(result.rows[0]);
 });
 
-router.delete('/:id', requireAuth, async (req, res) => {
+router.delete('/:id', requireAuth, requireAdmin, async (req, res) => {
   const { id } = req.params;  
   const result = await pool.query('DELETE FROM tastings WHERE id = $1 RETURNING *', [id]); 
 
