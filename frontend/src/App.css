@@ -1,81 +1,27 @@
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f7f5f2;
-  color: #2a2420;
-  margin: 0;
-}
+@import "tailwindcss";
 
-nav {
-  padding: 16px 24px;
-  background: #2a2420;
-  color: white;
-}
+@theme {
+  --color-ink: #1C1714;
+  --color-ink-body: #33291F;
+  --color-accent: #A6551F;
+  --color-accent-hover: #8C4415;
+  --color-paper: #F6F1E7;
+  --color-paper-raised: #FFFDF8;
+  --color-paper-sunken: #EFE9DE;
+  --color-canvas: #E9E6E1;
+  --color-rule-strong: #1C1714;
+  --color-rule: #D8D2C8;
+  --color-rule-light: #E2DBD0;
+  --color-row-hover: #F0EADE;
+  --color-text-muted: #6E665D;
+  --color-text-label: #8A8178;
+  --color-text-faint: #A2937C;
+  --color-text-on-dark-muted: #A79C90;
+  --color-nav-inactive: #C6BCAE;
+  --color-image-placeholder: #DFD8CB;
+  --color-dropzone-border: #C9C0B2;
+  --color-dropzone-fill: #F3EDE2;
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-right: 8px;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-.container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 12px 16px;
-  margin-bottom: 8px;
-}
-
-li a {
-  color: #7a3b2e;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-form div {
-  margin-bottom: 12px;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-input,
-textarea {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-button {
-  background: #7a3b2e;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #5f2d23;
+  --font-serif: "Newsreader", serif;
+  --font-sans: "Archivo", sans-serif;
 }
