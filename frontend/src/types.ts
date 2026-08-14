@@ -1,13 +1,16 @@
 export interface Whiskey {
-  id: number; 
+  id: number;
   name: string;
   distillery: string | null;
   region: string | null;
-  type: string | null; 
-  age_years: number | null; 
-  abv: string | null; 
-  notes: string | null; 
-  created_at: string; 
+  type: string | null;
+  age_years: number | null;
+  abv: string | null;
+  notes: string | null;
+  created_at: string;
+  average_rating: string | null;
+  tasting_count: string;
+  last_tasted_at: string | null;
 }
 
 export interface Tasting {
