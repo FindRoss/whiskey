@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 function AddTasting() {
   const { id } = useParams(); 
-
-  const [taster, setTaster] = useState('');
   const [tastedOn, setTastedOn] = useState('');
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState('');
@@ -22,7 +20,6 @@ function AddTasting() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
         body: JSON.stringify({
-          taster, 
           tasted_on: tastedOn ? tastedOn : null,
           comment,
           rating: rating ? Number(rating) : null,
@@ -43,12 +40,6 @@ function AddTasting() {
       <h1>Add Tasting</h1>
       <p>For whiskey id: {id}</p>
       <form onSubmit={handleSubmit} autoComplete="off">
-        <div>
-          <label>
-            Taster
-            <input value={taster} onChange={(e) => setTaster(e.target.value)} required />
-          </label>
-        </div>
        <div>
           <label>
             Date

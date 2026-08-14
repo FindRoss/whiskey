@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { SubmitEvent } from 'react';
 
-function Login({ onLogin }: { onLogin: () => void }) {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +13,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:3001/auth/login', {
+      const res = await fetch('http://localhost:3001/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -21,14 +21,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
 
       if (!res.ok) throw new Error('Invalid username or password');
 
-      const data = await res.json();
-     
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.role);
-      localStorage.setItem('user_id', data.user_id);
-      
-      onLogin();
-      navigate('/');
+      navigate('/login');
     } catch (err) {
       if (err instanceof Error) setError(err.message);
     }
@@ -36,7 +29,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit} autoComplete="off">
         <div>
           <label>
@@ -56,10 +49,10 @@ function Login({ onLogin }: { onLogin: () => void }) {
           </label>
         </div>
         {error && <p>{error}</p>}
-        <button type="submit">Log In</button>
+        <button type="submit">Create Account</button>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Register;

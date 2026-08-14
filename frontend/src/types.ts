@@ -12,8 +12,9 @@ export interface Whiskey {
 
 export interface Tasting {
   id: number; 
+  taster: string;
   whiskey_id: number; 
-  taster: string; 
+  user_id: number;
   tasted_on: string; 
   comment: string | null;
   rating: number | null; 
