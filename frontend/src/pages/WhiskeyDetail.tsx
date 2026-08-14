@@ -77,9 +77,6 @@ function WhiskeyDetail() {
     navigate('/');
   }
 
-
-  console.log(tastings);
-
   return (
     <div>
       {(userRole === 'admin') && <button onClick={handleDeleteWhiskey}>Delete whiskey</button>}
