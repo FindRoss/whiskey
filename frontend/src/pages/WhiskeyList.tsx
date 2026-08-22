@@ -103,7 +103,15 @@ function WhiskeyList() {
                   to={`/whiskies/${whiskey.id}`}
                   className="grid grid-cols-[68px_1fr_150px_120px] items-center gap-6 py-5 hover:bg-row-hover -mx-4 px-4"
                 >
-                  <div className="h-20 rounded-[2px] bg-image-placeholder border border-rule" />
+                  {whiskey.image_url ? (
+                    <img
+                      src={whiskey.image_url}
+                      alt={whiskey.name}
+                      className="h-20 w-[68px] rounded-[2px] border border-rule object-cover"
+                    />
+                  ) : (
+                    <div className="h-20 rounded-[2px] bg-image-placeholder border border-rule" />
+                  )}
 
                   <div>
                     <p className="font-serif text-[26px] text-ink">{whiskey.name}</p>

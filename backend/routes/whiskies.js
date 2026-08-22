@@ -42,17 +42,17 @@ router.get('/:id', async (req, res) => {
  });
 
  router.post('/', requireAuth, async (req, res) => {
-  const {name, distillery, region, type, age_years, abv, notes} = req.body; 
+  const {name, distillery, region, type, age_years, abv, notes, image_url} = req.body; 
 
   if (!name) {
     return res.status(400).json({ error: 'name is required' });
   }
 
   const result = await pool.query(
-    `INSERT INTO whiskies (name, distillery, region, type, age_years, abv, notes)
+    `INSERT INTO whiskies (name, distillery, region, type, age_years, abv, notes, image_url)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *`, 
-    [name, distillery, region, type, age_years, abv, notes]
+    [name, distillery, region, type, age_years, abv, notes, image_url]
   );
 
   res.status(201).json(result.rows[0]);
@@ -60,7 +60,7 @@ router.get('/:id', async (req, res) => {
 
  router.put('/:id', requireAuth, async (req, res) => {
   const { id } = req.params; 
-  const { name, distillery, region, type, age_years, abv, notes } = req.body;
+  const { name, distillery, region, type, age_years, abv, notes, image_url } = req.body;
 
   if (!name) {
     return res.status(400).json({ error: 'name is required' }); 
@@ -68,10 +68,10 @@ router.get('/:id', async (req, res) => {
 
   const result = await pool.query(
     `UPDATE whiskies
-    SET name = $1, distillery = $2, region = $3, type = $4, age_years = $5, abv = $6, notes = $7
-    WHERE id = $8
+    SET name = $1, distillery = $2, region = $3, type = $4, age_years = $5, abv = $6, notes = $7, image_url = $8
+    WHERE id = $9
     RETURNING *`,
-    [name, distillery, region, type, age_years, abv, notes, id]
+    [name, distillery, region, type, age_years, abv, notes, image_url, id]
   ); 
 
   if (result.rows.length === 0) {

@@ -11,6 +11,7 @@ export interface Whiskey {
   average_rating: string | null;
   tasting_count: string;
   last_tasted_at: string | null;
+  image_url: string | null;
 }
 
 export interface Tasting {

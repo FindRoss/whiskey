@@ -14,7 +14,7 @@ function Nav({ isLoggedIn, onLogout }: { isLoggedIn: boolean; onLogout: () => vo
   return (
     <nav className="bg-ink px-8 py-4 flex items-center justify-between">
       <Link to="/" className="font-serif text-xl tracking-[0.04em] text-paper">
-        Dram Book
+        Tastes Smokey
       </Link>
 
       {isLoggedIn ? (

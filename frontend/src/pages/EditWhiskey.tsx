@@ -1,51 +1,89 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { SubmitEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 
 const REGIONS = ['Islay', 'Speyside', 'Highland', 'Lowland', 'Campbeltown', 'Ireland', 'Kentucky', 'Japan'];
 
-function AddWhiskey() {
-  const [name, setName] = useState('');
-  const [distillery, setDistillery] = useState('');
+function EditWhiskey() {
+  const { id } = useParams();
+  const [name, setName] = useState<string>('');
+  const [distillery, setDistillery] = useState<string>(''); 
   const [region, setRegion] = useState('');
   const [type, setType] = useState('');
   const [ageYears, setAgeYears] = useState('');
   const [abv, setAbv] = useState('');
   const [notes, setNotes] = useState('');
-  const [submitting, setSubmitting] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate(); 
 
-  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
+  // I think i need to get this whiskey informatiion first.
+
+  useEffect(() => {
+    async function loadWhiskey() {
+      try {
+        const res = await fetch(`http://localhost:3001/whiskies/${id}`);
+            
+        if (!res.ok) throw new Error('Whiskey not found');
+
+        const data = await res.json();
+        const {name, distillery, region, type, age_years, abv, notes, image_url} = data;
+
+        setName(name ?? '');
+        setDistillery(distillery ?? '');
+        setRegion(region ?? '');
+        setType(type ?? '');
+        setAgeYears(age_years ?? '');
+        setAbv(abv ?? '');
+        setNotes(notes ?? '');
+        setImageUrl(image_url ?? '')
+      } catch (err) {
+         if (err instanceof Error) setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadWhiskey();
+  }, [id]); 
+
+  async function handleUpdate(e: SubmitEvent<HTMLFormElement>) { 
+    e.preventDefault(); 
     setSubmitting(true);
 
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch('http://localhost:3001/whiskies', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      const res = await fetch(`http://localhost:3001/whiskies/${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json', Authorization: `Bearer ${token}` }, 
         body: JSON.stringify({
-          name,
+          name, 
           distillery,
           region,
           type,
           age_years: ageYears ? Number(ageYears) : null,
           abv: abv ? Number(abv) : null,
           notes,
-          image_url: imageUrl 
-        }),
+          image_url: imageUrl
+        })    
       });
 
-      if (!res.ok) throw new Error('Somethings wrong');
-      navigate('/');
+      if (!res.ok) throw new Error('This is messed up');
+      navigate(`/whiskies/${id}`);  
+      
     } catch (err) {
-      console.error(err);
+      if (err instanceof Error) setError(err.message);
     } finally {
       setSubmitting(false);
     }
-  }
+  }; 
+  
+  if (loading) return <p className="p-14 font-sans text-text-muted">Loading...</p>;
+  if (error) return <p className="p-14 font-sans text-accent">Error: {error}</p>;
+  if (!name) return <p className="p-14 font-sans text-accent">No name???</p>;
 
   const inputClass =
     'w-full py-3 px-3.5 border border-rule rounded-[2px] bg-paper-raised text-[15px] text-ink focus:border-accent focus:outline-none';
@@ -54,17 +92,23 @@ function AddWhiskey() {
   return (
     <div className="min-h-screen bg-paper-sunken p-14">
       <div className="max-w-[820px] mx-auto bg-paper-raised border border-rule rounded-[3px] p-10">
-        <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">New entry</p>
-        <h1 className="font-serif text-[36px] text-ink my-2.5 mb-7">Add a bottle to the book</h1>
+        <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">Editing</p>
+        <h1 className="font-serif text-[36px] text-ink my-2.5 mb-7">{name}</h1>
 
-        <form onSubmit={handleSubmit} autoComplete="off" className="grid grid-cols-[200px_1fr] gap-9">
-          {/* Left: image dropzone */}
-          <div className="aspect-[3/4] border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint">
-            <span className="font-serif text-2xl">+</span>
-            <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
-            <p className="text-[12px] leading-[1.5] text-text-label text-center px-4 mt-1">
-              Drop an image or paste a URL. 3:4 crop.
-            </p>
+        <form onSubmit={handleUpdate} autoComplete="off" className="grid grid-cols-[200px_1fr] gap-9">
+          {/* Left: image preview / dropzone */}
+          <div className="aspect-[3/4] border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden">
+            {imageUrl ? (
+              <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+            ) : (
+              <>
+                <span className="font-serif text-2xl">+</span>
+                <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
+                <p className="text-[12px] leading-[1.5] text-text-label text-center px-4 mt-1">
+                  Drop an image or paste a URL. 3:4 crop.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Right: fields */}
@@ -87,7 +131,6 @@ function AddWhiskey() {
                   value={distillery}
                   onChange={(e) => setDistillery(e.target.value)}
                   placeholder="Lagavulin"
-                  required
                   className={inputClass}
                 />
               </div>
@@ -162,9 +205,9 @@ function AddWhiskey() {
                 disabled={submitting}
                 className="py-3.5 px-[30px] rounded-[2px] bg-ink text-paper text-[13px] font-semibold tracking-[0.14em] uppercase hover:bg-accent transition-colors disabled:opacity-60"
               >
-                {submitting ? 'Saving…' : 'Save bottle'}
+                {submitting ? 'Saving…' : 'Save changes'}
               </button>
-              <Link to="/" className="text-[14px] text-text-muted underline">
+              <Link to={`/whiskies/${id}`} className="text-[14px] text-text-muted underline">
                 Cancel
               </Link>
             </div>
@@ -175,4 +218,4 @@ function AddWhiskey() {
   );
 }
 
-export default AddWhiskey;
+export default EditWhiskey;

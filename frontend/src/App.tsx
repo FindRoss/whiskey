@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import WhiskeyList from './pages/WhiskeyList';
 import WhiskeyDetail from './pages/WhiskeyDetail';
 import AddWhiskey from './pages/AddWhiskey';
+import EditWhiskey from './pages/EditWhiskey';
 import AddTasting from './pages/AddTasting';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -33,6 +34,7 @@ function App() {
         <Route path="/" element={<WhiskeyList />} />
         <Route path="/whiskies/:id" element={<WhiskeyDetail />} />
         <Route path="/whiskies/new" element={<AddWhiskey />} />
+        <Route path="/whiskies/:id/edit" element={<EditWhiskey />} />
         <Route path="/whiskies/:id/tastings/new" element={<AddTasting />} />
         <Route path="/login" element={<Login onLogin={() => setIsLoggedIn(true)} />} />
         <Route path="/register" element={<Register />} />

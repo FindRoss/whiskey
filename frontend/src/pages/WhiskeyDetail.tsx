@@ -94,21 +94,29 @@ function WhiskeyDetail() {
     return tastingSort === 'oldest' ? diff : -diff;
   });
 
+  const textLinkClasses = 'text-[13px] text-text-muted underline self-start hover:text-accent cursor-pointer';
+
   return (
     <div className="p-14">
       <div className="grid grid-cols-[360px_1fr] gap-14">
         {/* Left column */}
         <div className="flex flex-col gap-5">
           {userRole === 'admin' && (
-            <button
-              onClick={handleDeleteWhiskey}
-              className="text-[13px] text-text-muted underline self-start hover:text-accent"
-            >
-              Delete this whiskey
-            </button>
+            <div className="flex flex-row gap-4">
+              <button onClick={handleDeleteWhiskey} className={textLinkClasses}>Delete whiskey</button>
+              <Link to={`/whiskies/${id}/edit`} className={textLinkClasses}>Edit Whiskey</Link>
+            </div>
           )}
 
-          <div className="aspect-[3/4] border border-rule rounded-[2px] bg-image-placeholder" />
+          {whiskey.image_url ? (
+            <img
+              src={whiskey.image_url}
+              alt={whiskey.name}
+              className="aspect-[3/4] w-full border border-rule rounded-[2px] object-cover"
+            />
+          ) : (
+            <div className="aspect-[3/4] border border-rule rounded-[2px] bg-image-placeholder" />
+          )}
 
           <div className="grid grid-cols-2 gap-x-3 gap-y-4 border-t border-rule-strong pt-4">
             <div>
@@ -180,12 +188,7 @@ function WhiskeyDetail() {
                     <div className="flex items-center justify-between">
                       <p className="text-[15px] font-semibold text-ink">{tasting.taster}</p>
                       {canDelete && (
-                        <button
-                          onClick={() => handleDeleteTasting(tasting.id)}
-                          className="text-[13px] text-text-muted underline opacity-0 group-hover:opacity-100 hover:text-accent"
-                        >
-                          Delete
-                        </button>
+                        <button onClick={() => handleDeleteTasting(tasting.id)} className={textLinkClasses}>Delete tasting</button>
                       )}
                     </div>
                     {tasting.comment && (

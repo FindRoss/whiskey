@@ -32,7 +32,7 @@ function Register() {
       <div className="grid grid-cols-2 w-full max-w-5xl border border-rule rounded-[4px] bg-paper shadow-[0_18px_40px_-28px_rgba(28,23,20,0.45)] overflow-hidden">
         {/* Left panel */}
         <div className="bg-ink p-14 flex flex-col justify-between">
-          <span className="font-serif text-[22px] tracking-[0.04em] text-paper">Dram Book</span>
+          <span className="font-serif text-[22px] tracking-[0.04em] text-paper">Tastes Smokey</span>
 
           <h1 className="font-serif font-light text-[52px] leading-[1.1] text-paper text-pretty">
             Keep a record of every dram worth remembering.
