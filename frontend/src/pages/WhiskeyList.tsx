@@ -51,26 +51,26 @@ function WhiskeyList() {
   const totalNotes = whiskies.reduce((sum, w) => sum + Number(w.tasting_count), 0);
 
   return (
-    <div className="p-8">
+    <div className="p-4 tablet:p-8">
       <div className="max-w-5xl mx-auto border border-rule rounded-[4px] bg-paper shadow-[0_18px_40px_-28px_rgba(28,23,20,0.45)]">
-        <div className="pt-11 px-14 pb-14">
+        <div className="pt-6 px-5 pb-8 tablet:pt-11 tablet:px-14 tablet:pb-14">
           {/* Page header */}
-          <div className="flex items-end justify-between border-b border-rule-strong pb-5">
+          <div className="flex flex-col items-start gap-4 tablet:flex-row tablet:items-end tablet:justify-between tablet:gap-0 border-b border-rule-strong pb-5">
             <div>
               <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">
                 {username ? `${username}'s collection` : 'the collection'}
               </p>
-              <h1 className="font-serif text-[46px] text-ink mt-1">
+              <h1 className="font-serif text-[32px] tablet:text-[46px] text-ink mt-1">
                 {whiskies.length} {whiskies.length === 1 ? 'bottle' : 'bottles'}, {totalNotes} {totalNotes === 1 ? 'note' : 'notes'}
               </h1>
             </div>
 
-            <div className="flex items-center gap-[10px]">
+            <div className="flex flex-col tablet:flex-row items-stretch tablet:items-center gap-[10px] w-full tablet:w-auto">
               <input
                 placeholder="Search the book…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-[240px] py-[11px] px-3.5 border border-rule rounded-[2px] bg-paper-raised text-[15px] text-ink focus:border-accent focus:outline-none"
+                className="w-full tablet:w-[240px] py-[11px] px-3.5 border border-rule rounded-[2px] bg-paper-raised text-[15px] text-ink focus:border-accent focus:outline-none"
               />
               <select
                 value={sortBy}
@@ -101,34 +101,37 @@ function WhiskeyList() {
                 <Link
                   key={whiskey.id}
                   to={`/whiskies/${whiskey.id}`}
-                  className="grid grid-cols-[68px_1fr_150px_120px] items-center gap-6 py-5 hover:bg-row-hover -mx-4 px-4"
+                  className="grid grid-cols-[56px_1fr_auto] tablet:grid-cols-[68px_1fr_150px_120px] items-center gap-4 tablet:gap-6 py-5 hover:bg-row-hover -mx-4 px-4"
                 >
                   {whiskey.image_url ? (
                     <img
                       src={whiskey.image_url}
                       alt={whiskey.name}
-                      className="h-20 w-[68px] rounded-[2px] border border-rule object-cover"
+                      className="h-14 w-14 tablet:h-20 tablet:w-[68px] rounded-[2px] border border-rule object-cover"
                     />
                   ) : (
-                    <div className="h-20 rounded-[2px] bg-image-placeholder border border-rule" />
+                    <div className="h-14 w-14 tablet:h-20 tablet:w-[68px] rounded-[2px] bg-image-placeholder border border-rule" />
                   )}
 
                   <div>
-                    <p className="font-serif text-[26px] text-ink">{whiskey.name}</p>
-                    <p className="font-sans text-[14px] text-text-muted mt-1">
+                    <p className="font-serif text-[20px] tablet:text-[26px] text-ink">{whiskey.name}</p>
+                    <p className="font-sans text-[13px] tablet:text-[14px] text-text-muted mt-1">
                       {[whiskey.region, whiskey.type].filter(Boolean).join(' ')}
                       {whiskey.age_years ? ` · ${whiskey.age_years} yr` : ''}
                       {whiskey.abv ? ` · ${whiskey.abv}% ABV` : ''}
                     </p>
+                    <p className="tablet:hidden font-sans text-[13px] text-text-faint mt-1">
+                      {whiskey.average_rating ? `${whiskey.average_rating}/5` : 'untasted'}
+                    </p>
                   </div>
 
-                  <p className="font-sans text-[14px] text-text-muted">
+                  <p className="hidden tablet:block font-sans text-[14px] text-text-muted">
                     {Number(whiskey.tasting_count) > 0
                       ? `${whiskey.tasting_count} ${Number(whiskey.tasting_count) === 1 ? 'note' : 'notes'} · ${formatMonthYear(whiskey.last_tasted_at!)}`
                       : 'No notes yet'}
                   </p>
 
-                  <p className="text-right">
+                  <p className="hidden tablet:block text-right">
                     {whiskey.average_rating ? (
                       <>
                         <span className="font-serif text-[30px] text-accent">{whiskey.average_rating}</span>

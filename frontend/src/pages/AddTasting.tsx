@@ -65,37 +65,39 @@ function AddTasting() {
   }
 
   return (
-    <div className="min-h-screen bg-paper-sunken p-14">
-      <div className="max-w-[620px] mx-auto bg-paper-raised border border-rule rounded-[3px] p-10">
+    <div className="min-h-screen bg-paper-sunken p-4 tablet:p-14">
+      <div className="max-w-[620px] mx-auto bg-paper-raised border border-rule rounded-[3px] p-6 tablet:p-10">
         <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">
           New tasting{whiskey ? ` · ${whiskey.name.toUpperCase()}` : ''}
         </p>
-        <h1 className="font-serif text-[36px] text-ink my-2.5 mb-7">What did it taste like?</h1>
+        <h1 className="font-serif text-[28px] tablet:text-[36px] text-ink my-2.5 mb-7">What did it taste like?</h1>
 
         <form onSubmit={handleSubmit} autoComplete="off" className="flex flex-col gap-6">
           {/* Rating */}
-          <div className="flex items-center gap-2">
-            {CELLS.map((n) => {
-              const isFull = rating !== null && rating >= n;
-              const isHalf = rating === n - 0.5;
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => handleCellClick(n)}
-                  className={`w-[54px] h-[46px] flex items-center justify-center font-serif text-xl rounded-[2px] border transition-colors ${
-                    isFull
-                      ? 'bg-accent border-accent text-paper-raised'
-                      : isHalf
-                      ? 'text-accent border-accent bg-[linear-gradient(90deg,#A6551F_50%,transparent_50%)]'
-                      : 'border-rule text-text-muted hover:border-accent hover:text-accent'
-                  }`}
-                >
-                  {n}
-                </button>
-              );
-            })}
-            <span className="text-[14px] text-text-muted ml-3">Half steps allowed — tap twice</span>
+          <div className="flex flex-col tablet:flex-row tablet:items-center gap-2">
+            <div className="flex items-center gap-2">
+              {CELLS.map((n) => {
+                const isFull = rating !== null && rating >= n;
+                const isHalf = rating === n - 0.5;
+                return (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => handleCellClick(n)}
+                    className={`w-12 h-12 tablet:w-[54px] tablet:h-[46px] flex items-center justify-center font-serif text-xl rounded-[2px] border transition-colors ${
+                      isFull
+                        ? 'bg-accent border-accent text-paper-raised'
+                        : isHalf
+                        ? 'text-accent border-accent bg-[linear-gradient(90deg,#A6551F_50%,transparent_50%)]'
+                        : 'border-rule text-text-muted hover:border-accent hover:text-accent'
+                    }`}
+                  >
+                    {n}
+                  </button>
+                );
+              })}
+            </div>
+            <span className="text-[14px] text-text-muted tablet:ml-3">Half steps allowed — tap twice</span>
           </div>
 
           {/* Date */}

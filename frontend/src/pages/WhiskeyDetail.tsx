@@ -97,8 +97,8 @@ function WhiskeyDetail() {
   const textLinkClasses = 'text-[13px] text-text-muted underline self-start hover:text-accent cursor-pointer';
 
   return (
-    <div className="p-14">
-      <div className="grid grid-cols-[360px_1fr] gap-14">
+    <div className="p-5 tablet:p-14">
+      <div className="grid grid-cols-1 tablet:grid-cols-[360px_1fr] gap-8 tablet:gap-14">
         {/* Left column */}
         <div className="flex flex-col gap-5">
           {userRole === 'admin' && (
@@ -112,10 +112,10 @@ function WhiskeyDetail() {
             <img
               src={whiskey.image_url}
               alt={whiskey.name}
-              className="aspect-[3/4] w-full border border-rule rounded-[2px] object-cover"
+              className="aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-rule rounded-[2px] object-cover"
             />
           ) : (
-            <div className="aspect-[3/4] border border-rule rounded-[2px] bg-image-placeholder" />
+            <div className="aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-rule rounded-[2px] bg-image-placeholder" />
           )}
 
           <div className="grid grid-cols-2 gap-x-3 gap-y-4 border-t border-rule-strong pt-4">
@@ -143,23 +143,25 @@ function WhiskeyDetail() {
           <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">
             {[whiskey.region, whiskey.type].filter(Boolean).join(' ')}
           </p>
-          <h1 className="font-serif text-[62px] leading-[1.02] text-ink mt-2">{whiskey.name}</h1>
+          <h1 className="font-serif text-[38px] tablet:text-[62px] leading-[1.05] tablet:leading-[1.02] text-ink mt-2">{whiskey.name}</h1>
 
-          <div className="flex items-center gap-[18px] mt-6 pb-6 border-b border-rule-strong">
-            {whiskey.average_rating ? (
-              <>
-                <span className="font-serif text-[40px] leading-none text-accent">{whiskey.average_rating}</span>
-                <span className="text-[15px] text-text-muted">
-                  average of {whiskey.tasting_count} {Number(whiskey.tasting_count) === 1 ? 'note' : 'notes'}
-                </span>
-              </>
-            ) : (
-              <span className="text-[15px] text-text-muted">No tastings yet</span>
-            )}
+          <div className="flex flex-col tablet:flex-row tablet:items-center gap-4 tablet:gap-[18px] mt-6 pb-6 border-b border-rule-strong">
+            <div className="flex items-center gap-[18px]">
+              {whiskey.average_rating ? (
+                <>
+                  <span className="font-serif text-[40px] leading-none text-accent">{whiskey.average_rating}</span>
+                  <span className="text-[15px] text-text-muted">
+                    average of {whiskey.tasting_count} {Number(whiskey.tasting_count) === 1 ? 'note' : 'notes'}
+                  </span>
+                </>
+              ) : (
+                <span className="text-[15px] text-text-muted">No tastings yet</span>
+              )}
+            </div>
 
             <Link
               to={`/whiskies/${id}/tastings/new`}
-              className="ml-auto py-3 px-[22px] rounded-[2px] bg-accent text-paper text-[13px] font-semibold tracking-[0.14em] uppercase hover:bg-accent-hover"
+              className="tablet:ml-auto text-center py-3 px-[22px] rounded-[2px] bg-accent text-paper text-[13px] font-semibold tracking-[0.14em] uppercase hover:bg-accent-hover"
             >
               Add a tasting
             </Link>
@@ -179,12 +181,12 @@ function WhiskeyDetail() {
             {sortedTastings.map((tasting) => {
               const canDelete = loggedInUserId === tasting.user_id || userRole === 'admin';
               return (
-                <div key={tasting.id} className="grid grid-cols-[108px_1fr] gap-6 group">
-                  <div>
+                <div key={tasting.id} className="grid grid-cols-1 tablet:grid-cols-[108px_1fr] gap-2 tablet:gap-6 group">
+                  <div className="flex items-baseline gap-2 tablet:block">
                     <p className="font-serif text-[22px] text-accent">{tasting.rating}</p>
-                    <p className="text-[13px] text-text-label mt-0.5">{formatFullDate(tasting.tasted_on)}</p>
+                    <p className="text-[13px] text-text-label tablet:mt-0.5">{formatFullDate(tasting.tasted_on)}</p>
                   </div>
-                  <div className="border-l border-rule-light pl-6">
+                  <div className="border-l-0 tablet:border-l border-rule-light pl-0 tablet:pl-6">
                     <div className="flex items-center justify-between">
                       <p className="text-[15px] font-semibold text-ink">{tasting.taster}</p>
                       {canDelete && (

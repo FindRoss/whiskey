@@ -90,14 +90,14 @@ function EditWhiskey() {
   const labelClass = 'block font-sans text-[11px] tracking-[0.16em] uppercase text-text-label mb-2';
 
   return (
-    <div className="min-h-screen bg-paper-sunken p-14">
-      <div className="max-w-[820px] mx-auto bg-paper-raised border border-rule rounded-[3px] p-10">
+    <div className="min-h-screen bg-paper-sunken p-4 tablet:p-14">
+      <div className="max-w-[820px] mx-auto bg-paper-raised border border-rule rounded-[3px] p-6 tablet:p-10">
         <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">Editing</p>
-        <h1 className="font-serif text-[36px] text-ink my-2.5 mb-7">{name}</h1>
+        <h1 className="font-serif text-[28px] tablet:text-[36px] text-ink my-2.5 mb-7">{name}</h1>
 
-        <form onSubmit={handleUpdate} autoComplete="off" className="grid grid-cols-[200px_1fr] gap-9">
+        <form onSubmit={handleUpdate} autoComplete="off" className="grid grid-cols-1 tablet:grid-cols-[200px_1fr] gap-6 tablet:gap-9">
           {/* Left: image preview / dropzone */}
-          <div className="aspect-[3/4] border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden">
+          <div className="aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden">
             {imageUrl ? (
               <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
             ) : (
@@ -124,7 +124,7 @@ function EditWhiskey() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-[18px]">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-[18px]">
               <div>
                 <label className={labelClass}>Distillery</label>
                 <input
@@ -145,7 +145,7 @@ function EditWhiskey() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-[18px]">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-[18px]">
               <div>
                 <label className={labelClass}>Age (years)</label>
                 <input

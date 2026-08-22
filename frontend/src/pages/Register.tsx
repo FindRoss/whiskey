@@ -28,17 +28,17 @@ function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas flex items-center justify-center p-8">
-      <div className="grid grid-cols-2 w-full max-w-5xl border border-rule rounded-[4px] bg-paper shadow-[0_18px_40px_-28px_rgba(28,23,20,0.45)] overflow-hidden">
+    <div className="min-h-screen bg-canvas flex items-center justify-center p-4 tablet:p-8">
+      <div className="grid grid-cols-1 tablet:grid-cols-2 w-full max-w-5xl border border-rule rounded-[4px] bg-paper shadow-[0_18px_40px_-28px_rgba(28,23,20,0.45)] overflow-hidden">
         {/* Left panel */}
-        <div className="bg-ink p-14 flex flex-col justify-between">
+        <div className="bg-ink p-8 tablet:p-14 flex flex-col gap-8 tablet:gap-0 tablet:justify-between">
           <span className="font-serif text-[22px] tracking-[0.04em] text-paper">Tastes Smokey</span>
 
-          <h1 className="font-serif font-light text-[52px] leading-[1.1] text-paper text-pretty">
+          <h1 className="font-serif font-light text-[34px] tablet:text-[52px] leading-[1.1] text-paper text-pretty">
             Keep a record of every dram worth remembering.
           </h1>
 
-          <p className="font-sans text-[16px] leading-[1.6] text-text-on-dark-muted max-w-sm mt-5">
+          <p className="font-sans text-[16px] leading-[1.6] text-text-on-dark-muted max-w-sm tablet:mt-5">
             A private logbook of what you've poured, and a shared library of notes for everything else.
           </p>
 
@@ -46,7 +46,7 @@ function Register() {
         </div>
 
         {/* Right panel */}
-        <div className="p-14 flex items-center justify-center">
+        <div className="p-8 tablet:p-14 flex items-center justify-center">
           <div className="w-full max-w-xs">
             <h2 className="font-serif text-[34px] text-ink mb-7">Create an account</h2>
 

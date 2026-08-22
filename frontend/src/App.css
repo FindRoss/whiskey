@@ -24,4 +24,6 @@
 
   --font-serif: "Newsreader", serif;
   --font-sans: "Archivo", sans-serif;
+
+  --breakpoint-tablet: 900px;
 }
