@@ -3,7 +3,7 @@ import type { SubmitEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../config';
 
-const REGIONS = ['Islay', 'Speyside', 'Highland', 'Lowland', 'Campbeltown', 'Ireland', 'Kentucky', 'Japan'];
+const REGIONS = ['Islay', 'Islands', 'Speyside', 'Highland', 'Lowland', 'Campbeltown', 'Ireland', 'Kentucky', 'Japan'];
 
 function AddWhiskey() {
   const [name, setName] = useState('');
