@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import type { Whiskey, Tasting } from '../types';
+import { API_URL } from '../config';
 
 function formatFullDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -28,8 +29,8 @@ function WhiskeyDetail() {
     async function loadData() {
       try {
         const [whiskeyRes, tastingsRes] = await Promise.all([
-          fetch(`http://localhost:3001/whiskies/${id}`),
-          fetch(`http://localhost:3001/whiskies/${id}/tastings`)
+          fetch(`${API_URL}/whiskies/${id}`),
+          fetch(`${API_URL}/whiskies/${id}/tastings`)
         ]);
 
         if (!whiskeyRes.ok) throw new Error('Whiskey not found');
@@ -57,7 +58,7 @@ function WhiskeyDetail() {
   async function handleDeleteWhiskey() {
     const token = localStorage.getItem('token');
 
-    const res = await fetch(`http://localhost:3001/whiskies/${id}`, {
+    const res = await fetch(`${API_URL}/whiskies/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -72,7 +73,7 @@ function WhiskeyDetail() {
   async function handleDeleteTasting(tastingId: number) {
     const token = localStorage.getItem('token');
 
-    const res = await fetch(`http://localhost:3001/tastings/${tastingId}`, {
+    const res = await fetch(`${API_URL}/tastings/${tastingId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     });

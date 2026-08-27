@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import type { Whiskey } from '../types';
 import type { SubmitEvent } from 'react';
+import { API_URL } from '../config';
 
 const CELLS = [1, 2, 3, 4, 5];
 
@@ -16,7 +17,7 @@ function AddTasting() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/whiskies/${id}`)
+    fetch(`${API_URL}/whiskies/${id}`)
       .then((res) => res.json())
       .then(setWhiskey)
       .catch(() => {});
@@ -45,7 +46,7 @@ function AddTasting() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`http://localhost:3001/whiskies/${id}/tastings`, {
+      const res = await fetch(`${API_URL}/whiskies/${id}/tastings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({

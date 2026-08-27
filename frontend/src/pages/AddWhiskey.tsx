@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SubmitEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const REGIONS = ['Islay', 'Speyside', 'Highland', 'Lowland', 'Campbeltown', 'Ireland', 'Kentucky', 'Japan'];
 
@@ -23,7 +24,7 @@ function AddWhiskey() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch('http://localhost:3001/whiskies', {
+      const res = await fetch(`${API_URL}/whiskies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({

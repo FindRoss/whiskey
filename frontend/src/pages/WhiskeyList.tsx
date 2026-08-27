@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Whiskey } from '../types';
+import { API_URL } from '../config';
 
 function formatMonthYear(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
@@ -17,7 +18,7 @@ function WhiskeyList() {
   useEffect(() => {
     async function loadWhiskies() {
       try {
-        const res = await fetch('http://localhost:3001/whiskies');
+        const res = await fetch(`${API_URL}/whiskies`);
 
         if (!res.ok) throw new Error('Failed to fetch whiskies');
 

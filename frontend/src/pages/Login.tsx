@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import type { SubmitEvent } from 'react';
+import { API_URL } from '../config';
 
 function Login({ onLogin }: { onLogin: () => void }) {
   const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:3001/auth/login', {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

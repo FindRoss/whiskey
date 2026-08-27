@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { SubmitEvent } from 'react';
+import { API_URL } from '../config';
 
 const REGIONS = ['Islay', 'Speyside', 'Highland', 'Lowland', 'Campbeltown', 'Ireland', 'Kentucky', 'Japan'];
 
@@ -24,7 +25,7 @@ function EditWhiskey() {
   useEffect(() => {
     async function loadWhiskey() {
       try {
-        const res = await fetch(`http://localhost:3001/whiskies/${id}`);
+        const res = await fetch(`${API_URL}/whiskies/${id}`);
             
         if (!res.ok) throw new Error('Whiskey not found');
 
@@ -56,7 +57,7 @@ function EditWhiskey() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`http://localhost:3001/whiskies/${id}`, {
+      const res = await fetch(`${API_URL}/whiskies/${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json', Authorization: `Bearer ${token}` }, 
         body: JSON.stringify({
