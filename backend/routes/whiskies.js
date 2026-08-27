@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
 
   const result = await pool.query(
     `INSERT INTO whiskies (name, distillery, region, type, age_years, abv, notes, image_url)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *`, 
     [name, distillery, region, type, age_years, abv, notes, image_url]
   );
