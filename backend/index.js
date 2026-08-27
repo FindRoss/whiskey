@@ -11,7 +11,11 @@ dotenv.config();
 
 const app = express(); 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173' })); 
+const allowedOrigins = ['http://localhost:5173'];
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+app.use(cors({ origin: allowedOrigins }));
 app.use('/whiskies', whiskiesRouter); 
 app.use('/tastings', tastingsRouter);
 app.use('/auth', authRouter); 
