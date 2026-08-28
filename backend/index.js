@@ -4,6 +4,7 @@ import pool from './db.js';
 import cors from 'cors';
 import whiskiesRouter from './routes/whiskies.js'; 
 import tastingsRouter from './routes/tastings.js';
+import uploadRouter from './routes/upload.js'; 
 import authRouter from './routes/auth.js'; 
 
 
@@ -18,6 +19,7 @@ if (process.env.FRONTEND_URL) {
 app.use(cors({ origin: allowedOrigins }));
 app.use('/whiskies', whiskiesRouter); 
 app.use('/tastings', tastingsRouter);
+app.use('/upload', uploadRouter); 
 app.use('/auth', authRouter); 
 const port = process.env.PORT || 3001; 
 

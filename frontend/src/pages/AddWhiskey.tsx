@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import type { SubmitEvent } from 'react';
+import type { SubmitEvent, ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../config';
-
-const REGIONS = ['Islay', 'Islands', 'Speyside', 'Highland', 'Lowland', 'Campbeltown', 'Ireland', 'Kentucky', 'Japan'];
+import { REGIONS, inputClass, labelClass } from '../constants';
 
 function AddWhiskey() {
   const [name, setName] = useState('');
@@ -15,6 +14,7 @@ function AddWhiskey() {
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const navigate = useNavigate();
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
@@ -48,9 +48,40 @@ function AddWhiskey() {
     }
   }
 
-  const inputClass =
-    'w-full py-3 px-3.5 border border-rule rounded-[2px] bg-paper-raised text-[15px] text-ink focus:border-accent focus:outline-none';
-  const labelClass = 'block font-sans text-[11px] tracking-[0.16em] uppercase text-text-label mb-2';
+  async function handleImage(e: ChangeEvent<HTMLInputElement>) { 
+      setSubmitting(true);
+
+      const file = e.target.files?.[0];
+      if (!file) return; 
+
+      
+      setPreviewUrl(URL.createObjectURL(file));
+
+      const formData = new FormData(); 
+      formData.append('image', file);
+       
+      const token = localStorage.getItem('token');
+      
+      try {
+        const res = await fetch(`${API_URL}/upload`, {
+          method: 'POST', 
+          headers: { Authorization: `Bearer ${token}` }, 
+          body: formData
+        }); 
+
+        if (!res.ok) throw new Error('Issue with upload');
+        
+        const data = await res.json();
+        setImageUrl(data.url);
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setSubmitting(false);
+      }
+  }
+
+  
 
   return (
     <div className="min-h-screen bg-paper-sunken p-4 tablet:p-14">
@@ -61,11 +92,18 @@ function AddWhiskey() {
         <form onSubmit={handleSubmit} autoComplete="off" className="grid grid-cols-1 tablet:grid-cols-[200px_1fr] gap-6 tablet:gap-9">
           {/* Left: image dropzone */}
           <div className="aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint">
-            <span className="font-serif text-2xl">+</span>
-            <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
-            <p className="text-[12px] leading-[1.5] text-text-label text-center px-4 mt-1">
-              Drop an image or paste a URL. 3:4 crop.
-            </p>
+            {previewUrl ? (
+              <img src={previewUrl} alt={name} />
+            ) : (
+              <>
+                <label htmlFor="bottleImage">
+                  <span className="font-serif text-2xl">+</span>
+                  <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
+                </label>
+                <input type="file" id="bottleImage" onChange={handleImage} accept="image/png, image/jpeg, image/webp" />
+              </>
+            )}
+           
           </div>
 
           {/* Right: fields */}
@@ -144,16 +182,6 @@ function AddWhiskey() {
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 className={`${inputClass} resize-y`}
-              />
-            </div>
-
-            <div>
-              <label className={labelClass}>Image URL</label>
-              <input
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://"
-                className={inputClass}
               />
             </div>
 
