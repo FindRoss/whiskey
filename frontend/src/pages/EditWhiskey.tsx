@@ -38,6 +38,7 @@ function EditWhiskey() {
         setAbv(abv ?? '');
         setNotes(notes ?? '');
         setImageUrl(image_url ?? '')
+        setPreviewUrl(image_url ?? null);
       } catch (err) {
          if (err instanceof Error) setError(err.message);
       } finally {
@@ -128,11 +129,11 @@ function EditWhiskey() {
               <img src={previewUrl} alt={name} />
             ) : (
               <>
-                <label htmlFor="bottleImage">
+                <label htmlFor="bottleImage" className="cursor-pointer h-full w-full flex flex-col items-center justify-center gap-1.5">
                   <span className="font-serif text-2xl">+</span>
                   <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
                 </label>
-                <input type="file" id="bottleImage" onChange={handleImage} accept="image/png, image/jpeg, image/webp" />
+                <input type="file" id="bottleImage" onChange={handleImage} accept="image/png, image/jpeg, image/webp" hidden />
               </>
             )}
           </div>

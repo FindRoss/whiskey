@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { SubmitEvent, ChangeEvent } from 'react';
+import type { SubmitEvent, ChangeEvent, DragEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../config';
 import { REGIONS, inputClass, labelClass } from '../constants';
@@ -15,6 +15,7 @@ function AddWhiskey() {
   const [submitting, setSubmitting] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
@@ -48,14 +49,26 @@ function AddWhiskey() {
     }
   }
 
-  async function handleImage(e: ChangeEvent<HTMLInputElement>) { 
-      setSubmitting(true);
+  function handleImage(e: ChangeEvent<HTMLInputElement>) { 
+    setSubmitting(true);
 
-      const file = e.target.files?.[0];
-      if (!file) return; 
+    const file = e.target.files?.[0];
+    if (!file) return; 
 
-      
-      setPreviewUrl(URL.createObjectURL(file));
+    uploadImage(file);
+  }
+
+  function handleDrop(e: DragEvent<HTMLInputElement>) {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return; 
+
+    uploadImage(file);
+  } 
+
+  async function uploadImage(file: File) {
+    setPreviewUrl(URL.createObjectURL(file));
 
       const formData = new FormData(); 
       formData.append('image', file);
@@ -82,6 +95,21 @@ function AddWhiskey() {
   }
 
   
+  function handleDragOver(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragging(true);
+    console.log('dragOver');
+  }
+  
+  function handleDragLeave() {
+    setIsDragging(false);
+    console.log('dragLeave');
+  }
+
+  function handleRemoveImage() {
+    setImageUrl('');
+    setPreviewUrl('');
+  }
 
   return (
     <div className="min-h-screen bg-paper-sunken p-4 tablet:p-14">
@@ -91,19 +119,25 @@ function AddWhiskey() {
 
         <form onSubmit={handleSubmit} autoComplete="off" className="grid grid-cols-1 tablet:grid-cols-[200px_1fr] gap-6 tablet:gap-9">
           {/* Left: image dropzone */}
-          <div className="aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint">
-            {previewUrl ? (
-              <img src={previewUrl} alt={name} />
+          <div 
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`${ isDragging ? 'border-accent' : 'border-dropzone-border' } aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden`}>
+             {previewUrl ? (
+              <div>
+                <span className="cursor-pointer" onClick={handleRemoveImage}>X</span>
+                <img src={previewUrl} alt={name} />
+              </div>
             ) : (
               <>
-                <label htmlFor="bottleImage">
+                <label htmlFor="bottleImage" className="cursor-pointer h-full w-full flex flex-col items-center justify-center gap-1.5">
                   <span className="font-serif text-2xl">+</span>
                   <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
                 </label>
-                <input type="file" id="bottleImage" onChange={handleImage} accept="image/png, image/jpeg, image/webp" />
+                <input type="file" id="bottleImage" onChange={handleImage} accept="image/png, image/jpeg, image/webp" hidden />
               </>
             )}
-           
           </div>
 
           {/* Right: fields */}
