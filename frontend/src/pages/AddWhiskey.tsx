@@ -70,28 +70,28 @@ function AddWhiskey() {
   async function uploadImage(file: File) {
     setPreviewUrl(URL.createObjectURL(file));
 
-      const formData = new FormData(); 
-      formData.append('image', file);
-       
-      const token = localStorage.getItem('token');
+    const formData = new FormData(); 
+    formData.append('image', file);
       
-      try {
-        const res = await fetch(`${API_URL}/upload`, {
-          method: 'POST', 
-          headers: { Authorization: `Bearer ${token}` }, 
-          body: formData
-        }); 
+    const token = localStorage.getItem('token');
+    
+    try {
+      const res = await fetch(`${API_URL}/upload`, {
+        method: 'POST', 
+        headers: { Authorization: `Bearer ${token}` }, 
+        body: formData
+      }); 
 
-        if (!res.ok) throw new Error('Issue with upload');
-        
-        const data = await res.json();
-        setImageUrl(data.url);
+      if (!res.ok) throw new Error('Issue with upload');
+      
+      const data = await res.json();
+      setImageUrl(data.url);
 
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setSubmitting(false);
-      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   
