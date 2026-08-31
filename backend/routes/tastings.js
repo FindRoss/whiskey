@@ -5,6 +5,23 @@ import requireAdmin from '../middleware/requireAdmin.js'
 
 const router = express.Router(); 
 
+router.get('/', async (req, res) => {
+  try {
+    const result = await pool.query(
+    `SELECT tastings.*, users.username AS taster, whiskies.name AS whiskey_name, whiskies.image_url AS whiskey_image
+    FROM tastings
+    JOIN users On tastings.user_id = users.id
+    JOIN whiskies on tastings.whiskey_id = whiskies.id
+    ORDER BY tasted_on DESC`
+  );
+
+  res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch tastings' });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params; 
   const result = await pool.query(
