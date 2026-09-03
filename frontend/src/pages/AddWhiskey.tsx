@@ -13,6 +13,7 @@ function AddWhiskey() {
   const [abv, setAbv] = useState('');
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -25,6 +26,9 @@ function AddWhiskey() {
     const token = localStorage.getItem('token');
 
     try {
+
+      console.log(imageFile);
+      
       const res = await fetch(`${API_URL}/whiskies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -55,7 +59,8 @@ function AddWhiskey() {
     const file = e.target.files?.[0];
     if (!file) return; 
 
-    uploadImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+    setImageFile(file);
   }
 
   function handleDrop(e: DragEvent<HTMLInputElement>) {
@@ -64,46 +69,50 @@ function AddWhiskey() {
     const file = e.dataTransfer.files?.[0];
     if (!file) return; 
 
-    uploadImage(file);
+    console.log(file);
+
+    // Preview - I could set preview in the handle files? maybe?
+    setPreviewUrl(URL.createObjectURL(file));
+    setImageFile(file);
+  
   } 
 
-  async function uploadImage(file: File) {
-    setPreviewUrl(URL.createObjectURL(file));
+  // async function uploadImage(file: File) {
+ 
 
-    const formData = new FormData(); 
-    formData.append('image', file);
+  //   // Everything from here upload
+  //   const formData = new FormData(); 
+  //   formData.append('image', file);
       
-    const token = localStorage.getItem('token');
+  //   const token = localStorage.getItem('token');
     
-    try {
-      const res = await fetch(`${API_URL}/upload`, {
-        method: 'POST', 
-        headers: { Authorization: `Bearer ${token}` }, 
-        body: formData
-      }); 
+  //   try {
+  //     const res = await fetch(`${API_URL}/upload`, {
+  //       method: 'POST', 
+  //       headers: { Authorization: `Bearer ${token}` }, 
+  //       body: formData
+  //     }); 
 
-      if (!res.ok) throw new Error('Issue with upload');
+  //     if (!res.ok) throw new Error('Issue with upload');
       
-      const data = await res.json();
-      setImageUrl(data.url);
+  //     const data = await res.json();
+  //     setImageUrl(data.url);
 
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // }
 
   
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
     setIsDragging(true);
-    console.log('dragOver');
   }
   
   function handleDragLeave() {
     setIsDragging(false);
-    console.log('dragLeave');
   }
 
   function handleRemoveImage() {
@@ -136,6 +145,7 @@ function AddWhiskey() {
                   <span className="font-sans text-[11px] tracking-[0.14em] uppercase">Bottle photo</span>
                 </label>
                 <input type="file" id="bottleImage" onChange={handleImage} accept="image/png, image/jpeg, image/webp" hidden />
+
               </>
             )}
           </div>
