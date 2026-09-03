@@ -14,7 +14,6 @@ function AddWhiskey() {
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -25,9 +24,17 @@ function AddWhiskey() {
 
     const token = localStorage.getItem('token');
 
-    try {
+    // I dont think i would do this inside my try / catch block. 
+    // I think I would do it here first? 
+    // This function updates the imageUrl state - so it would need to complete before the fetch request to the api endpoint.
+    
+    
+    let uploadedUrl = ''; 
+    if (imageFile) {
+      uploadedUrl = await uploadImage(imageFile);
+    } 
 
-      console.log(imageFile);
+    try {
       
       const res = await fetch(`${API_URL}/whiskies`, {
         method: 'POST',
@@ -40,7 +47,7 @@ function AddWhiskey() {
           age_years: ageYears ? Number(ageYears) : null,
           abv: abv ? Number(abv) : null,
           notes,
-          image_url: imageUrl 
+          image_url: uploadedUrl 
         }),
       });
 
@@ -54,8 +61,6 @@ function AddWhiskey() {
   }
 
   function handleImage(e: ChangeEvent<HTMLInputElement>) { 
-    setSubmitting(true);
-
     const file = e.target.files?.[0];
     if (!file) return; 
 
@@ -69,41 +74,32 @@ function AddWhiskey() {
     const file = e.dataTransfer.files?.[0];
     if (!file) return; 
 
-    console.log(file);
-
-    // Preview - I could set preview in the handle files? maybe?
     setPreviewUrl(URL.createObjectURL(file));
     setImageFile(file);
-  
   } 
 
-  // async function uploadImage(file: File) {
- 
-
-  //   // Everything from here upload
-  //   const formData = new FormData(); 
-  //   formData.append('image', file);
+  async function uploadImage(file: File) {
+    const formData = new FormData(); 
+    formData.append('image', file);
       
-  //   const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     
-  //   try {
-  //     const res = await fetch(`${API_URL}/upload`, {
-  //       method: 'POST', 
-  //       headers: { Authorization: `Bearer ${token}` }, 
-  //       body: formData
-  //     }); 
+    try {
+      const res = await fetch(`${API_URL}/upload`, {
+        method: 'POST', 
+        headers: { Authorization: `Bearer ${token}` }, 
+        body: formData
+      }); 
 
-  //     if (!res.ok) throw new Error('Issue with upload');
+      if (!res.ok) throw new Error('Issue with upload');
       
-  //     const data = await res.json();
-  //     setImageUrl(data.url);
+      const data = await res.json();
+      return data.url;
 
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // }
+    } catch (err) {
+      console.error(err);
+    } 
+  }
 
   
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
@@ -116,7 +112,6 @@ function AddWhiskey() {
   }
 
   function handleRemoveImage() {
-    setImageUrl('');
     setPreviewUrl('');
   }
 
@@ -134,9 +129,14 @@ function AddWhiskey() {
             onDrop={handleDrop}
             className={`${ isDragging ? 'border-accent' : 'border-dropzone-border' } aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden`}>
              {previewUrl ? (
-              <div>
-                <span className="cursor-pointer" onClick={handleRemoveImage}>X</span>
-                <img src={previewUrl} alt={name} />
+              <div className="relative w-full h-full">
+                <span
+                  className="absolute top-1.5 right-1.5 z-10 cursor-pointer bg-paper-raised rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                  onClick={handleRemoveImage}
+                >
+                  X
+                </span>
+                <img src={previewUrl} alt={name} className="w-full h-full object-cover" />
               </div>
             ) : (
               <>

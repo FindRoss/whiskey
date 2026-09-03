@@ -181,6 +181,8 @@ function WhiskeyDetail() {
           <div className="flex flex-col gap-7">
             {sortedTastings.map((tasting) => {
               const canDelete = loggedInUserId === tasting.user_id || userRole === 'admin';
+
+              console.log(tasting);
               return (
                 <div key={tasting.id} className="grid grid-cols-1 tablet:grid-cols-[108px_1fr] gap-2 tablet:gap-6 group">
                   <div className="flex items-baseline gap-2 tablet:block">

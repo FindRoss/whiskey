@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import type { SubmitEvent, ChangeEvent } from 'react';
+import type { SubmitEvent, ChangeEvent, DragEvent } from 'react';
 import { API_URL } from '../config';
 import { REGIONS, inputClass, labelClass } from '../constants';
 
@@ -14,10 +14,12 @@ function EditWhiskey() {
   const [abv, setAbv] = useState('');
   const [notes, setNotes] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [isDragging, setIsDragging] = useState(false); 
   const navigate = useNavigate(); 
 
   useEffect(() => {
@@ -55,20 +57,25 @@ function EditWhiskey() {
 
     const token = localStorage.getItem('token');
 
+    let uploadedUrl = imageUrl;
+    if (imageFile) {
+      uploadedUrl = await uploadImage(imageFile);
+    }
+
     try {
       const res = await fetch(`${API_URL}/whiskies/${id}`, {
         method: 'PUT',
-        headers: { 'content-type': 'application/json', Authorization: `Bearer ${token}` }, 
+        headers: { 'content-type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          name, 
+          name,
           distillery,
           region,
           type,
           age_years: ageYears ? Number(ageYears) : null,
           abv: abv ? Number(abv) : null,
           notes,
-          image_url: imageUrl
-        })    
+          image_url: uploadedUrl
+        })
       });
 
       if (!res.ok) throw new Error('This is messed up');
@@ -81,40 +88,63 @@ function EditWhiskey() {
     }
   }; 
 
-  async function handleImage(e: ChangeEvent<HTMLInputElement>) { 
-    setSubmitting(true);
-
+  function handleImage(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return; 
-    
-    setPreviewUrl(URL.createObjectURL(file));
+    if (!file) return;
 
-    const formData = new FormData(); 
+    setPreviewUrl(URL.createObjectURL(file));
+    setImageFile(file);
+  }
+
+  async function uploadImage(file: File) {
+    const formData = new FormData();
     formData.append('image', file);
-      
+
     const token = localStorage.getItem('token');
-    
+
     try {
       const res = await fetch(`${API_URL}/upload`, {
-        method: 'POST', 
-        headers: { Authorization: `Bearer ${token}` }, 
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
         body: formData
-      }); 
+      });
 
       if (!res.ok) throw new Error('Issue with upload');
-      
+
       const data = await res.json();
-      setImageUrl(data.url);
+      return data.url;
     } catch (err) {
       console.error(err);
-    } finally {
-      setSubmitting(false);
     }
   }
   
   if (loading) return <p className="p-14 font-sans text-text-muted">Loading...</p>;
   if (error) return <p className="p-14 font-sans text-accent">Error: {error}</p>;
   if (!name) return <p className="p-14 font-sans text-accent">No name???</p>;
+
+
+  function handleDrop(e: DragEvent<HTMLInputElement>) {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return; 
+
+    setPreviewUrl(URL.createObjectURL(file));
+    setImageFile(file);
+  } 
+
+  function handleDragOver(e: DragEvent) {
+    e.preventDefault(); 
+    setIsDragging(true);
+  }
+
+  function handleDragLeave() {
+    setIsDragging(false);
+  }
+
+  function handleRemoveImage() {
+    setPreviewUrl('');
+  }
 
   return (
     <div className="min-h-screen bg-paper-sunken p-4 tablet:p-14">
@@ -124,9 +154,21 @@ function EditWhiskey() {
 
         <form onSubmit={handleUpdate} autoComplete="off" className="grid grid-cols-1 tablet:grid-cols-[200px_1fr] gap-6 tablet:gap-9">
           {/* Left: image preview / dropzone */}
-          <div className="aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden">
+          <div 
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`${ isDragging ? 'border-accent' : 'border-dropzone-border' } aspect-[3/4] w-full max-w-[220px] tablet:max-w-none border border-dashed border-dropzone-border rounded-[2px] bg-dropzone-fill flex flex-col items-center justify-center gap-1.5 text-text-faint overflow-hidden`}>
              {previewUrl ? (
-              <img src={previewUrl} alt={name} />
+              <div className="relative w-full h-full">
+                <span
+                  className="absolute top-1.5 right-1.5 z-10 cursor-pointer bg-paper-raised rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                  onClick={handleRemoveImage}
+                >
+                  X
+                </span>
+                <img src={previewUrl} alt={name} className="w-full h-full object-cover" />
+              </div>
             ) : (
               <>
                 <label htmlFor="bottleImage" className="cursor-pointer h-full w-full flex flex-col items-center justify-center gap-1.5">
