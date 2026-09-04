@@ -13,7 +13,6 @@ function WhiskeyList() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<'recent' | 'name' | 'rating'>('recent');
-  const username = localStorage.getItem('username');
 
   useEffect(() => {
     async function loadWhiskies() {
