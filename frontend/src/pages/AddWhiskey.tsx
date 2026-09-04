@@ -118,7 +118,7 @@ function AddWhiskey() {
     <div className="min-h-screen bg-paper-sunken p-4 tablet:p-14">
       <div className="max-w-[820px] mx-auto bg-paper-raised border border-rule rounded-[3px] p-6 tablet:p-10">
         <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">New entry</p>
-        <h1 className="font-serif text-[28px] tablet:text-[36px] text-ink my-2.5 mb-7">Add a bottle to the book</h1>
+        <h1 className="font-serif text-[28px] tablet:text-[36px] text-ink my-2.5 mb-7">Add a bottle to your collection</h1>
 
         <form onSubmit={handleSubmit} autoComplete="off" className="grid grid-cols-1 tablet:grid-cols-[200px_1fr] gap-6 tablet:gap-9">
           {/* Left: image dropzone */}

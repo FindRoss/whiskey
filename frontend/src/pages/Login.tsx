@@ -48,11 +48,11 @@ function Login({ onLogin }: { onLogin: () => void }) {
           <span className="font-serif text-[22px] tracking-[0.04em] text-paper">Tastes Smokey</span>
 
           <h1 className="font-serif font-light text-[34px] tablet:text-[52px] leading-[1.1] text-paper text-pretty">
-            Keep a record of every dram worth remembering.
+            Keep a record of every dram.
           </h1>
 
           <p className="font-sans text-[16px] leading-[1.6] text-text-on-dark-muted max-w-sm tablet:mt-5">
-            A private logbook of what you've poured, and a shared library of notes for everything else.
+            Track every whiskey you try.
           </p>
 
           <span className="font-sans text-[12px] tracking-[0.14em] uppercase text-[#6E645A]">EST. 2026</span>
@@ -95,7 +95,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
                 type="submit"
                 className="w-full py-3.5 rounded-[2px] bg-accent text-paper text-[13px] font-semibold tracking-[0.14em] uppercase hover:bg-accent-hover transition-colors"
               >
-                Enter the book
+                Login
               </button>
             </form>
 

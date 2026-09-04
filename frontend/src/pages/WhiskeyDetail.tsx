@@ -37,7 +37,7 @@ function WhiskeyDetail() {
         if (!tastingsRes.ok) throw new Error('Failed to fetch tastings');
 
         const whiskeyData = await whiskeyRes.json();
-        const tastingsData = await tastingsRes.json();
+      const tastingsData = await tastingsRes.json();
 
         setWhiskey(whiskeyData);
         setTastings(tastingsData);
@@ -127,23 +127,40 @@ function WhiskeyDetail() {
           )}
 
           <div className="grid grid-cols-2 gap-x-3 gap-y-4 border-t border-rule-strong pt-4">
-            <div>
-              <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Distillery</p>
-              <p className="text-[16px] text-ink mt-1">{whiskey.distillery ?? '—'}</p>
-            </div>
+            {whiskey.distillery && (
+              <div>
+                <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Distillery</p>
+                <p className="text-[16px] text-ink mt-1">{whiskey.distillery ?? '—'}</p>
+              </div>
+            )}
+            
+            {whiskey.region && (
             <div>
               <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Region</p>
               <p className="text-[16px] text-ink mt-1">{whiskey.region ?? '—'}</p>
             </div>
+            )}
+
             <div>
               <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Age</p>
               <p className="text-[16px] text-ink mt-1">{whiskey.age_years ? `${whiskey.age_years} years` : '—'}</p>
             </div>
-            <div>
-              <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Strength</p>
-              <p className="text-[16px] text-ink mt-1">{whiskey.abv ? `${whiskey.abv}% ABV` : '—'}</p>
-            </div>
+            
+            {whiskey.abv && (
+              <div>
+                <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Strength</p>
+                <p className="text-[16px] text-ink mt-1">{whiskey.abv}% ABV</p>
+              </div>
+            )}
+
           </div>
+
+          {whiskey.notes && (
+            <div>
+              <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-text-label">Notes</p>
+              <p className="text-[16px] text-ink mt-1">{whiskey.notes}</p>
+            </div>
+          )}
         </div>
 
         {/* Right column */}

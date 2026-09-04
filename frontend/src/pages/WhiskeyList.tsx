@@ -56,15 +56,15 @@ function WhiskeyList() {
   const totalNotes = whiskies.reduce((sum, w) => sum + Number(w.tasting_count), 0);
 
   return (
-    <div className="p-4 tablet:p-8">
-      <div className="max-w-5xl mx-auto border border-rule rounded-[4px] bg-paper shadow-[0_18px_40px_-28px_rgba(28,23,20,0.45)]">
-        <div className="pt-6 px-5 pb-8 tablet:pt-11 tablet:px-14 tablet:pb-14">
+    <div className="max-w-5xl mx-auto p-4 tablet:p-8">
+      <div className="pt-6 pb-8 tablet:pt-11 tablet:pb-14">
           {/* Page header */}
           <div className="flex flex-col items-start gap-4 tablet:flex-row tablet:items-end tablet:justify-between tablet:gap-0 border-b border-rule-strong pb-5">
             <div>
               <p className="font-sans text-[12px] tracking-[0.18em] uppercase text-text-label">
-                {username ? `${username}'s collection` : 'the collection'}
+                The Collection
               </p>
+
               <h1 className="font-serif text-[32px] tablet:text-[46px] text-ink mt-1">
                 {whiskies.length} {whiskies.length === 1 ? 'bottle' : 'bottles'}, {totalNotes} {totalNotes === 1 ? 'note' : 'notes'}
               </h1>
@@ -72,7 +72,7 @@ function WhiskeyList() {
 
             <div className="flex flex-col tablet:flex-row items-stretch tablet:items-center gap-[10px] w-full tablet:w-auto">
               <input
-                placeholder="Search the book…"
+                placeholder="Search whiskies…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full tablet:w-[240px] py-[11px] px-3.5 border border-rule rounded-[2px] bg-paper-raised text-[15px] text-ink focus:border-accent focus:outline-none"
@@ -92,7 +92,7 @@ function WhiskeyList() {
           {/* Rows */}
           {sorted.length === 0 ? (
             <div className="mt-10 border border-rule rounded-[2px] text-center py-16">
-              <p className="font-serif text-[22px] text-ink mb-4">Nothing in the book yet</p>
+              <p className="font-serif text-[22px] text-ink mb-4">Nothing added yet.</p>
               <Link
                 to="/whiskies/new"
                 className="inline-block py-3 px-6 rounded-[2px] bg-accent text-paper text-[13px] font-semibold tracking-[0.14em] uppercase hover:bg-accent-hover"
@@ -151,7 +151,6 @@ function WhiskeyList() {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }
