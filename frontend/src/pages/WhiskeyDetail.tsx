@@ -25,22 +25,38 @@ function WhiskeyDetail() {
   const userRole = localStorage.getItem('role');
   const loggedInUserId = Number(localStorage.getItem('user_id'));
 
+  const getWhiskeyData = async () => {
+    try {
+      const res = await fetch(`${API_URL}/whiskies/${id}`); 
+      if (!res.ok) throw new Error('Whiskey not found');
+
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
+    }
+  }
+
+  const getTastingData = async () => {
+    try {
+      const res = await fetch(`${API_URL}/whiskies/${id}/tastings`);
+      if (!res.ok) throw new Error('Failed to fetch tastings');
+
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
+    }
+  }
+
   useEffect(() => {
     async function loadData() {
       try {
-        const [whiskeyRes, tastingsRes] = await Promise.all([
-          fetch(`${API_URL}/whiskies/${id}`),
-          fetch(`${API_URL}/whiskies/${id}/tastings`)
-        ]);
-
-        if (!whiskeyRes.ok) throw new Error('Whiskey not found');
-        if (!tastingsRes.ok) throw new Error('Failed to fetch tastings');
-
-        const whiskeyData = await whiskeyRes.json();
-      const tastingsData = await tastingsRes.json();
+        const whiskeyData = await getWhiskeyData(); 
+        const tastingData = await getTastingData();
 
         setWhiskey(whiskeyData);
-        setTastings(tastingsData);
+        setTastings(tastingData);
       } catch (err) {
         if (err instanceof Error) setError(err.message);
       } finally {
@@ -90,6 +106,9 @@ function WhiskeyDetail() {
       return;
     }
     setTastings((prev) => prev.filter((t) => t.id !== tastingId));
+    
+    const updatedWhiskeyData = await getWhiskeyData(); 
+    setWhiskey(updatedWhiskeyData);
   }
 
   function cycleSort() {
