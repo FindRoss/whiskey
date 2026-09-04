@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import logo from '../assets/logo__100x100.svg';
 
 function Nav({ isLoggedIn, onLogout }: { isLoggedIn: boolean; onLogout: () => void }) {
   const location = useLocation();
@@ -19,7 +20,8 @@ function Nav({ isLoggedIn, onLogout }: { isLoggedIn: boolean; onLogout: () => vo
   return (
     <nav className="bg-ink px-6 tablet:px-8 py-4 relative">
       <div className="flex items-center justify-between">
-        <Link to="/" className="font-serif text-xl tracking-[0.04em] text-paper" onClick={closeMobile}>
+        <Link to="/" className="flex items-center gap-2 font-serif text-xl tracking-[0.04em] text-paper" onClick={closeMobile}>
+          <img src={logo} alt="" className="w-7 h-7" />
           Tastes Smokey
         </Link>
 
