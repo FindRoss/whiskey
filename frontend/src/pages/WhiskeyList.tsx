@@ -34,6 +34,10 @@ function WhiskeyList() {
     loadWhiskies();
   }, []);
 
+  useEffect(() => {
+    document.title = 'Tastes Smokey';
+  }, [])
+
   if (loading) return <p className="p-14 font-sans text-text-muted">Loading...</p>;
   if (error) return <p className="p-14 font-sans text-accent">Error: {error}</p>;
 

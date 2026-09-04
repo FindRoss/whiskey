@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import type { Whiskey } from '../types';
 import type { SubmitEvent } from 'react';
@@ -32,6 +32,12 @@ function AddTasting() {
       setRating(n);
     }
   }
+
+  useEffect(() => {
+    if (!whiskey) return;
+
+    document.title = `Add tasting for ${whiskey.name} - Tastes Smokey`;
+  }, [whiskey]);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();

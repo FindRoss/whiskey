@@ -51,6 +51,12 @@ function EditWhiskey() {
     loadWhiskey();
   }, [id]); 
 
+  useEffect(() => {
+    if (!name) return; 
+
+    document.title = `Edit ${name} - Tastes Smokey`;
+  }, [name]); 
+
   async function handleUpdate(e: SubmitEvent<HTMLFormElement>) { 
     e.preventDefault(); 
     setSubmitting(true);

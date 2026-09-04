@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import type { SubmitEvent } from 'react';
 import { API_URL } from '../config';
@@ -27,6 +27,10 @@ function Register() {
       if (err instanceof Error) setError(err.message);
     }
   }
+
+  useEffect(() => {
+    document.title = 'Register - Tastes Smokey';
+  }, []);
 
   return (
     <div className="min-h-screen bg-canvas flex items-center justify-center p-4 tablet:p-8">

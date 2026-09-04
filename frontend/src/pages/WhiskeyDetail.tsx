@@ -51,6 +51,13 @@ function WhiskeyDetail() {
     loadData();
   }, [id]);
 
+  useEffect(() => {
+    if (!whiskey) return;
+
+    document.title = `${whiskey.name} - Tastes Smokey`; 
+
+  }, [whiskey]) 
+
   if (loading) return <p className="p-14 font-sans text-text-muted">Loading...</p>;
   if (error) return <p className="p-14 font-sans text-accent">Error: {error}</p>;
   if (!whiskey) return <p className="p-14 font-sans text-text-muted">Whiskey not found.</p>;

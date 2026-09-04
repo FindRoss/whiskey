@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { SubmitEvent, ChangeEvent, DragEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../config';
@@ -18,16 +18,15 @@ function AddWhiskey() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = 'Add whiskey - Tastes Smokey';
+  }, []);
+
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
 
     const token = localStorage.getItem('token');
-
-    // I dont think i would do this inside my try / catch block. 
-    // I think I would do it here first? 
-    // This function updates the imageUrl state - so it would need to complete before the fetch request to the api endpoint.
-    
     
     let uploadedUrl = ''; 
     if (imageFile) {
